@@ -9,20 +9,20 @@
 #include <stdlib.h>
 #include "merge_binary_insertion_sort.h"
 
-static void initialize_array(void **array, int (*comparator)(void *, void *));
-static int array_length(void **array);
+static SortedArray *initialize_array(void **array, int (*comparator)(void *, void *));
 static int binary_search(void *item, SortedArray *sorted_array, int low, int high);
 static void binary_insertion_sort(SortedArray *sorted_array);
+static void merge(SortedArray *sorted_array, int l, int m, int r);
+static void mergeSort(SortedArray *sorted_array);
 
 struct _SortedArray
 {
     void **array;
     int (*comparator)(void *, void *);
-    unsigned long length;
 };
 
 // Function that initialize the sorted array structure
-static void initialize_array(void **array, int (*comparator)(void *, void *))
+static SortedArray *initialize_array(void **array, int (*comparator)(void *, void *))
 {
     if (array == NULL)
     {
@@ -38,13 +38,9 @@ static void initialize_array(void **array, int (*comparator)(void *, void *))
     }
 
     sorted_array->array = array;
-    sorted_array->length = array_length(array);
     sorted_array->comparator = comparator;
-}
 
-static int array_length(void **array)
-{
-    return sizeof(array) / sizeof(array[0]);
+    return sorted_array;
 }
 
 // A Binary Search based function to find the position where item should be inserted in a[low..high]
@@ -91,8 +87,98 @@ static void binary_insertion_sort(SortedArray *sorted_array)
     }
 }
 
-SortedArray *sort(void **array, int (*comparator)(void *, void *))
+static void merge(SortedArray *sorted_array, int l, int m, int r)
 {
-    // TO-DO ...
-    return NULL;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    //Create temp arrays
+    void **L = (void **)malloc(sizeof(void *) * n1);
+    void **R = (void **)malloc(sizeof(void *) * n2);
+
+    //Copy data to temp arrays L[] and R[]
+
+    for (int i = 0; i < n1; i++)
+    {
+        L[i] = sorted_array->array[l + i];
+    }
+
+    for (int j = 0; j < n2; j++)
+    {
+        R[j] = sorted_array->array[m + 1 + j];
+    }
+
+    // Merge the temp arrays back into arr[l..r]
+
+    // Initial index of first subarray
+    int i = 0;
+
+    // Initial index of second subarray
+    int j = 0;
+
+    // Initial index of merged subarray
+    int k = l;
+
+    while (i < n1 && j < n2)
+    {
+        if (((*sorted_array->comparator))(L[i], R[j]) <= 0)
+        {
+            sorted_array->array[k] = L[i];
+            i++;
+        }
+        else
+        {
+            sorted_array->array[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copy the remaining elements of
+    // L[], if there are any
+    while (i < n1)
+    {
+        sorted_array->array[k] = L[i];
+        i++;
+        k++;
+    }
+
+    // Copy the remaining elements of
+    // R[], if there are any
+    while (j < n2)
+    {
+        sorted_array->array[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+SortedArray *sort(void **array, int (*comparator)(void *, void *), int left, int right)
+{
+    initialize_array(array, comparator);
+    mergeSort()
+}
+
+static void mergeSort(SortedArray *sorted_array, int left, int right)
+{
+    /*if (l >= r)
+    {
+        return; //returns recursively
+    }
+    int m = l + (r - l) / 2;
+    mergeSort(arr, l, m);
+    mergeSort(arr, m + 1, r);
+    merge(arr, l, m, r);
+    */
+
+    if (right - left + 1 == K)
+    {
+        binary_insertion_sort(sorted_array);
+        return;
+    }
+
+    int m = (right - left + 1) / 2;
+    mergeSort(sorted_array, left, right);
+    mergeSort(sorted_array, left + 1, right);
+    merge(sorted_array, left, m, right);
 }
