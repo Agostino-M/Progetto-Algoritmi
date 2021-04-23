@@ -15,11 +15,7 @@ static void binary_insertion_sort(SortedArray *sorted_array);
 static void **merge(SortedArray *sorted_array, int l, int m, int r);
 static void **merge_sort(SortedArray *sorted_array, int left, int right);
 
-struct _SortedArray
-{
-    void **array;
-    int (*comparator)(void *, void *);
-};
+SortedArray *sorted_array = NULL;
 
 // Function that initialize the sorted array structure
 static SortedArray *initialize_array(void **array, int (*comparator)(void *, void *))
@@ -30,7 +26,8 @@ static SortedArray *initialize_array(void **array, int (*comparator)(void *, voi
         exit(EXIT_FAILURE);
     }
 
-    SortedArray *sorted_array = (SortedArray *)malloc(sizeof(SortedArray));
+    sorted_array = (SortedArray *)malloc(sizeof(SortedArray));
+
     if (sorted_array == NULL)
     {
         fprintf(stderr, "initialize_array: unable to allocate memory for the sorted array");
@@ -162,6 +159,6 @@ static void **merge_sort(SortedArray *sorted_array, int left, int right)
 
 void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int left, int right)
 {
-    SortedArray *temp_array = initialize_array(array, comparator);
-    return merge_sort(temp_array, left, right);
+    sorted_array = initialize_array(array, comparator);
+    return merge_sort(sorted_array, left, right);
 }

@@ -11,10 +11,14 @@
 // 'K' specifies the value of the sublists length for which Insertion Sort should be used instead of Merge Sort
 #define K 10
 
+struct _SortedArray
+{
+    void **array;
+    int (*comparator)(void *, void *);
+};
+
 // Array of generic to be sorted
 typedef struct _SortedArray SortedArray;
-
-SortedArray sorted_array;
 
 // Function that sorts a SortedArray using a modified version of the Merge Sort in which
 // sublists of length 'K' or less are sorted using the BinaryInsertion Sort and are then
