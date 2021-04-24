@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include "merge_binary_insertion_sort.h"
 
-static void initialize_array(void **array, int (*comparator)(void *, void *));
+static void initialize_array(void *array, int (*comparator)(void *, void *));
 static int binary_search(void *item, int low, int high);
-static void binary_insertion_sort();
+static void binary_insertion_sort(int size);
 static void merge(int l, int m, int r);
 static void merge_sort(int left, int right);
 
 SortedArray *sorted_array;
 
 // Function that initialize the sorted array structure
-static void initialize_array(void **array, int (*comparator)(void *, void *))
+static void initialize_array(void *array, int (*comparator)(void *, void *))
 {
     if (array == NULL)
     {
@@ -59,12 +59,12 @@ static int binary_search(void *item, int low, int high)
 }
 
 // Function that sort a sublist of sorted array of size 'K' using BinaryInsertion Sort
-static void binary_insertion_sort()
+static void binary_insertion_sort(int size)
 {
 
     int i, loc, j;
     void *selected;
-    for (i = 1; i < K; ++i)
+    for (i = 1; i < size; ++i)
     {
         j = i - 1;
         selected = sorted_array->array[i];
@@ -142,30 +142,98 @@ static void merge(int l, int m, int r)
 // l is for left index and r is right index of the sub-array of array to be sorted
 static void merge_sort(int left, int right)
 {
-    if (right - left + 1 == K)
+    if (right - left + 1 <= K)
     {
-        binary_insertion_sort(sorted_array);
+        binary_insertion_sort(right - left + 1);
         return;
     }
 
-    int m = (right - left + 1) / 2;
-    merge_sort(left, right);
-    merge_sort(left + 1, right);
-    merge(left, m, right);
+    int mid = left + (right - left) / 2;
+    merge_sort(left, mid);
+    merge_sort(mid + 1, right);
+    merge(left, mid, right);
 }
 
-void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int left, int right)
+void *sorted_array_sort(void *array, int (*comparator)(void *, void *), int left, int right)
 {
     initialize_array(array, comparator);
     merge_sort(left, right);
     return sorted_array;
 }
 
-void sorted_array_free_memory(){
-    if(sorted_array == NULL){
-        fprintf(stderr,"sorted_array_free_memory: sorted_array parameter cannot be NULL");
+void sorted_array_free_memory()
+{
+    if (sorted_array == NULL)
+    {
+        fprintf(stderr, "sorted_array_free_memory: sorted_array parameter cannot be NULL");
         exit(EXIT_FAILURE);
     }
     free(sorted_array->array);
     free(sorted_array);
 }
+
+/*
+// comparator ralation used in tests
+static int comparator_int_asc(void *i1, void *i2)
+{
+    int *int1 = (int *)i1;
+    int *int2 = (int *)i2;
+    if ((*int1) == (*int2))
+        return (0);
+
+    else if ((*int1) > (*int2))
+        return 1;
+
+    else
+        return -1;
+}
+
+
+int main()
+{
+    static int i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
+
+    i1 = 1;
+    i2 = 2;
+    i3 = 3;
+    i4 = 4;
+    i5 = 5;
+    i6 = 6;
+    i7 = 7;
+    i8 = 8;
+    i9 = 9;
+    i10 = 10;
+
+    int *array_expected[] = {&i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10}; //1 5 7
+    int *actual_array[] = {&i5, &i2, &i7, &i1, &i3, &i6, &i9, &i10, &i4, &i8};   //5 7 1
+
+    printf("\n\nExpected : ");
+
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%d ", *array_expected[i]);
+    }
+
+    printf("\n\nActual : ");
+
+    for (int j = 0; j < 10; j++)
+    {
+        printf("%d ", *actual_array[j]);
+    }
+
+    printf("\n");
+
+    sorted_array_sort(actual_array, comparator_int_asc, 0, 9);
+
+    printf("\n\nOrdinato : ");
+
+    for (int j = 0; j < 10; j++)
+    {
+        printf("%d ", *actual_array[j]);
+    }
+
+    printf("\n");
+
+}
+
+*/

@@ -9,7 +9,7 @@
 #define MERGE_BINARY_INSERTION_SORT_H
 
 // 'K' specifies the value of the sublists length for which Insertion Sort should be used instead of Merge Sort
-#define K 10
+#define K 2
 
 struct _SortedArray
 {
@@ -23,7 +23,7 @@ typedef struct _SortedArray SortedArray;
 // Function that sorts a SortedArray using a modified version of the Merge Sort in which
 // sublists of length 'K' or less are sorted using the BinaryInsertion Sort and are then
 // combined using the traditional merge sort mechanism
-void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int left, int right);
+void *sorted_array_sort(void *array, int (*comparator)(void *, void *), int left, int right);
 
 
 void sorted_array_free_memory();

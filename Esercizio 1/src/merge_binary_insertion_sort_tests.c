@@ -24,6 +24,7 @@ static int comparator_int_asc(void *i1, void *i2)
         return -1;
 }
 
+/*
 // comparator ralation used in tests
 static int comparator_int_desc(void *i1, void *i2)
 {
@@ -38,6 +39,9 @@ static int comparator_int_desc(void *i1, void *i2)
     else
         return -1;
 }
+
+*/
+
 
 // Data elements that are initialized before each test
 static void **array_int;
