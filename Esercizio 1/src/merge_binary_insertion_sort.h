@@ -25,4 +25,8 @@ typedef struct _SortedArray SortedArray;
 // combined using the traditional merge sort mechanism
 void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int left, int right);
 
+
+void sorted_array_free_memory();
+
+
 #endif /* MERGE_BINARY_INSERTION_SORT_H */

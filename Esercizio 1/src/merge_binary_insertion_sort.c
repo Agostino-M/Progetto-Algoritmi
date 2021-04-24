@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include "merge_binary_insertion_sort.h"
 
-static SortedArray *initialize_array(void **array, int (*comparator)(void *, void *));
-static int binary_search(void *item, SortedArray *sorted_array, int low, int high);
-static void binary_insertion_sort(SortedArray *sorted_array);
-static void **merge(SortedArray *sorted_array, int l, int m, int r);
-static void **merge_sort(SortedArray *sorted_array, int left, int right);
+static void initialize_array(void **array, int (*comparator)(void *, void *));
+static int binary_search(void *item, int low, int high);
+static void binary_insertion_sort();
+static void merge(int l, int m, int r);
+static void merge_sort(int left, int right);
 
-SortedArray *sorted_array = NULL;
+SortedArray *sorted_array;
 
 // Function that initialize the sorted array structure
-static SortedArray *initialize_array(void **array, int (*comparator)(void *, void *))
+static void initialize_array(void **array, int (*comparator)(void *, void *))
 {
     if (array == NULL)
     {
@@ -36,12 +36,10 @@ static SortedArray *initialize_array(void **array, int (*comparator)(void *, voi
 
     sorted_array->array = array;
     sorted_array->comparator = comparator;
-
-    return sorted_array;
 }
 
 // A Binary Search based function to find the position where item should be inserted in a[low..high]
-static int binary_search(void *item, SortedArray *sorted_array, int low, int high)
+static int binary_search(void *item, int low, int high)
 {
     if (high <= low)
         // return (item > a[low]) ?(low + 1) : low;
@@ -55,13 +53,13 @@ static int binary_search(void *item, SortedArray *sorted_array, int low, int hig
 
     // if (item > a[mid])
     if (((*sorted_array->comparator))(item, (sorted_array->array)[mid]) > 0)
-        return binary_search(sorted_array, item, mid + 1, high);
+        return binary_search(item, mid + 1, high);
 
-    return binary_search(sorted_array, item, low, mid - 1);
+    return binary_search(item, low, mid - 1);
 }
 
 // Function that sort a sublist of sorted array of size 'K' using BinaryInsertion Sort
-static void binary_insertion_sort(SortedArray *sorted_array)
+static void binary_insertion_sort()
 {
 
     int i, loc, j;
@@ -72,7 +70,7 @@ static void binary_insertion_sort(SortedArray *sorted_array)
         selected = sorted_array->array[i];
 
         // Find location where selected sould be inseretd
-        loc = binary_search(sorted_array, selected, 0, j);
+        loc = binary_search(selected, 0, j);
 
         // Move all elements after location to create space
         while (j >= loc)
@@ -84,7 +82,7 @@ static void binary_insertion_sort(SortedArray *sorted_array)
     }
 }
 
-static void **merge(SortedArray *sorted_array, int l, int m, int r)
+static void merge(int l, int m, int r)
 {
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -139,26 +137,35 @@ static void **merge(SortedArray *sorted_array, int l, int m, int r)
 
     free(L);
     free(R);
-    return sorted_array->array;
 }
 
 // l is for left index and r is right index of the sub-array of array to be sorted
-static void **merge_sort(SortedArray *sorted_array, int left, int right)
+static void merge_sort(int left, int right)
 {
     if (right - left + 1 == K)
     {
         binary_insertion_sort(sorted_array);
-        return sorted_array->array;
+        return;
     }
 
     int m = (right - left + 1) / 2;
-    merge_sort(sorted_array, left, right);
-    merge_sort(sorted_array, left + 1, right);
-    return merge(sorted_array, left, m, right);
+    merge_sort(left, right);
+    merge_sort(left + 1, right);
+    merge(left, m, right);
 }
 
 void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int left, int right)
 {
-    sorted_array = initialize_array(array, comparator);
-    return merge_sort(sorted_array, left, right);
+    initialize_array(array, comparator);
+    merge_sort(left, right);
+    return sorted_array;
+}
+
+void sorted_array_free_memory(){
+    if(sorted_array == NULL){
+        fprintf(stderr,"sorted_array_free_memory: sorted_array parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    free(sorted_array->array);
+    free(sorted_array);
 }
