@@ -6,6 +6,9 @@ clean:
 
 tests: bin/merge_binary_insertion_sort_tests
 
+usage: bin/merge_binary_insertion_sort
+	./bin/merge_binary_insertion_sort records.csv
+
 CFLAGS = -g -Wall -Wextra -Wpedantic -Wconversion
 
 INCLUDES = src/*.h

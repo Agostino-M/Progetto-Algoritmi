@@ -24,7 +24,6 @@ static int comparator_int_asc(void *i1, void *i2)
         return -1;
 }
 
-/*
 // comparator ralation used in tests
 static int comparator_int_desc(void *i1, void *i2)
 {
@@ -40,42 +39,83 @@ static int comparator_int_desc(void *i1, void *i2)
         return -1;
 }
 
-*/
-
-
 // Data elements that are initialized before each test
-static void **array_int;
-static int i1, i2, i3;
+static int i1, i2, i3, i4, i5, i6, i7, i8, i9, i10;
 
 void setUp(void)
 {
-    i1 = 5;
-    i2 = 7;
-    i3 = 1;
-    array_int = malloc(ARRAY_INT_LENGHT * sizeof(int *));
+    i1 = 1;
+    i2 = 2;
+    i3 = 3;
+    i4 = 4;
+    i5 = 5;
+    i6 = 6;
+    i7 = 7;
+    i8 = 8;
+    i9 = 9;
+    i10 = 10;
 }
 
 void tearDown(void)
 {
-    sorted_array_free_memory();
 }
 
-static void test_sorted_array_three_el(void)
+static void test_three_el_int_asc(void)
 {
-    int *array_expected[] = {&i3, &i1, &i2}; //1 5 7
-    int *actual_array[] = {&i1, &i2, &i3}; //5 7 1
+    int *array_expected[] = {&i1, &i2, &i3};
+    int *actual_array[] = {&i3, &i2, &i1};
 
-
-    sorted_array_sort(actual_array, comparator_int_asc, 0, 2);
-
+    sorted_array_sort((void **)actual_array, comparator_int_asc, 3);
     TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 3);
 }
 
-int main(void){
+static void test_three_el_int_desc(void)
+{
+    int *array_expected[] = {&i3, &i2, &i1};
+    int *actual_array[] = {&i1, &i2, &i3};
+
+    sorted_array_sort((void **)actual_array, comparator_int_desc, 3);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 3);
+}
+
+static void test_one_el_int(void)
+{
+    int *array_expected[] = {&i1};
+    int *actual_array[] = {&i1};
+
+    sorted_array_sort((void **)actual_array, comparator_int_asc, 1);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 1);
+}
+
+static void test_equal_el(void)
+{
+    int *array_expected[] = {&i1, &i1, &i1};
+    int *actual_array[] = {&i1, &i1, &i1};
+
+    sorted_array_sort((void **)actual_array, comparator_int_asc, 3);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 3);
+}
+
+static void test_ten_el_int_asc(void)
+{
+    int *array_expected[] = {&i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10};
+    int *actual_array[] = {&i5, &i2, &i4, &i7, &i10, &i8, &i6, &i1, &i3, &i9};
+
+    sorted_array_sort((void **)actual_array, comparator_int_asc, 10);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 10);
+}
+
+
+int main(void)
+{
     // test session
     UNITY_BEGIN();
 
-    RUN_TEST(test_sorted_array_three_el);
+    RUN_TEST(test_three_el_int_asc);
+    RUN_TEST(test_three_el_int_desc);
+    RUN_TEST(test_one_el_int);
+    RUN_TEST(test_equal_el);
+    RUN_TEST(test_ten_el_int_asc);
 
     return UNITY_END();
 }
