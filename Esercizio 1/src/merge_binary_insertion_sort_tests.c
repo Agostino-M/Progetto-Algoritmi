@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "merge_binary_insertion_sort.h"
 #include "unity.h"
 
@@ -37,6 +38,13 @@ static int comparator_int_desc(void *i1, void *i2)
 
     else
         return -1;
+}
+
+static int comparator_string(void *s1, void *s2)
+{
+    char *string1 = (char *)s1;
+    char *string2 = (char *)s2;
+    return strcmp(string1, string2);
 }
 
 // Data elements that are initialized before each test
@@ -105,6 +113,23 @@ static void test_ten_el_int_asc(void)
     TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 10);
 }
 
+static void test_three_el_string_asc(void)
+{
+    char *array_expected[] = {"albero", "bici", "casa"};
+    char *actual_array[] = {"casa", "bici", "albero"};
+
+    sorted_array_sort((void **)actual_array, comparator_string, 3);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 3);
+}
+
+static void test_one_el_string(void)
+{
+    char *array_expected[] = {"albero"};
+    char *actual_array[] = {"albero"};
+
+    sorted_array_sort((void **)actual_array, comparator_string, 1);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 1);
+}
 
 int main(void)
 {
@@ -116,6 +141,8 @@ int main(void)
     RUN_TEST(test_one_el_int);
     RUN_TEST(test_equal_el);
     RUN_TEST(test_ten_el_int_asc);
+    RUN_TEST(test_three_el_string_asc);
+    RUN_TEST(test_one_el_string);
 
     return UNITY_END();
 }

@@ -3,13 +3,17 @@
 #include <string.h>
 #include "merge_binary_insertion_sort.h"
 
-#define SIZE 10
+#define SIZE 11
 
 struct record
 {
     char *string_field;
     int integer_field;
 };
+
+struct record *records;
+int cont = 0;
+
 
 // It takes as input two pointers to struct record
 // It returns 1 if and only if the integer field of the first record is less than
@@ -64,21 +68,23 @@ static int comparator_record_string_field(void *r1_p, void *r2_p)
 }
 */
 
-static void load_array(const char *file_path, struct record **record_prova)
+
+static void load_array(const char *file_path)
 {
-    char *read_line_p;
-    char buffer[1024];
-    int buf_size = 1024;
+    records = malloc(SIZE * sizeof(struct record));
     FILE *fp;
-    int cont = 0;
-    printf("\nLoading data from file...");
+    char *read_line_p;
+    int buf_size = 1024;
+    char buffer[1024];
+
     fp = fopen(file_path, "r");
     if (fp == NULL)
     {
-        fprintf(stderr, "main: unable to open the file %s\n", file_path);
+        fprintf(stderr, "Error reading file\n");
         exit(EXIT_FAILURE);
     }
-    while (fgets(buffer, buf_size, fp) != NULL && cont <= 10)
+
+    while (fgets(buffer, buf_size, fp) != NULL && cont < SIZE)
     {
         read_line_p = malloc((strlen(buffer) + 1) * sizeof(char));
         if (read_line_p == NULL)
@@ -87,55 +93,39 @@ static void load_array(const char *file_path, struct record **record_prova)
             exit(EXIT_FAILURE);
         }
         strcpy(read_line_p, buffer);
-        strtok(read_line_p, ","); //ID
-        //char *string_field_in_read_line_p = strtok(read_line_p, ",");
         strtok(read_line_p, ",");
+        char *string_field_in_read_line_p = strtok(NULL, ",");
         char *integer_field_in_read_line_p = strtok(NULL, ",");
-        strtok(read_line_p, ","); //DOUBLE
-        //char *string_field = malloc((strlen(string_field_in_read_line_p) + 1) * sizeof(char));
-        /*if (string_field == NULL)
+        char *string_field = malloc((strlen(string_field_in_read_line_p) + 1) * sizeof(char));
+        if (string_field == NULL)
         {
             fprintf(stderr, "main: unable to allocate memory for the string field of the read record");
             exit(EXIT_FAILURE);
         }
-        */
-        //strcpy(string_field, string_field_in_read_line_p);
+        strcpy(string_field, string_field_in_read_line_p);
         int integer_field = atoi(integer_field_in_read_line_p);
-        struct record *record_p = malloc(sizeof(struct record));
-        if (record_p == NULL)
-        {
-            fprintf(stderr, "main: unable to allocate memory for the read record");
-            exit(EXIT_FAILURE);
-        }
-        //record_p->string_field = string_field;
-        record_p->integer_field = integer_field;
-        //ordered_array_add(ordered_array, (void *)record_p);
-        //record_prova[cont]->string_field = string_field;
-        record_prova[cont]->integer_field =  integer_field;
-        free(read_line_p);
+
+        records[cont].string_field = string_field;
+        records[cont].integer_field = integer_field;
         cont++;
-    }
-    fclose(fp);
-    printf("DONE\n");
-}
-
-static void print_array(struct record** record_prova, unsigned long size){
-    struct record *array_element;
-
-    printf("\nORDERED ARRAY OF RECORDS\n");
-    for(unsigned long i = 0;i<size;i++){
-        array_element = record_prova[i];
-        printf("<%s,%d>\n",array_element->string_field,array_element->integer_field);
+        free(read_line_p);
     }
 }
 
 static void test_with_comparison_function(const char *file_path)
 {
-    struct record **record_prova = (struct record **)malloc(SIZE * (sizeof(struct record)));
-    load_array(file_path, record_prova);
-    sorted_array_sort((void**)record_prova, comparator_record_int_field, SIZE);
-    print_array(record_prova, SIZE);
-    free(record_prova);
+    load_array(file_path);
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("<%s,%d>\n", records[i].string_field, records[i].integer_field);
+    }
+
+    printf("\n\n");
+
+    sorted_array_sort((void**)records, comparator_record_int_field, SIZE);
+
+    free(records);
 }
 
 // It should be invoked with one parameter specifying the path of the data file
@@ -147,5 +137,7 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
     test_with_comparison_function(argv[1]);
+
+
     return (EXIT_SUCCESS);
 }
