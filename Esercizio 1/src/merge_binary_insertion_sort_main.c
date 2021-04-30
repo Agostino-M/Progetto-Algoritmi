@@ -3,7 +3,7 @@
 #include <string.h>
 #include "merge_binary_insertion_sort.h"
 
-#define SIZE 11
+#define SIZE 10
 
 struct record
 {
@@ -11,9 +11,8 @@ struct record
     int integer_field;
 };
 
-struct record *records;
+struct record **records;
 int cont = 0;
-
 
 // It takes as input two pointers to struct record
 // It returns 1 if and only if the integer field of the first record is less than
@@ -45,7 +44,6 @@ static int comparator_record_int_field(void *r1_p, void *r2_p)
         return -1;
 }
 
-/*
 // It takes as input two pointers to struct record
 // It returns 1 if and only if the string field of the first record is less than
 // the string field of the second one (0 otherwise)
@@ -66,8 +64,6 @@ static int comparator_record_string_field(void *r1_p, void *r2_p)
 
     return strcmp(rec1_p->string_field, rec2_p->string_field);
 }
-*/
-
 
 static void load_array(const char *file_path)
 {
@@ -104,9 +100,10 @@ static void load_array(const char *file_path)
         }
         strcpy(string_field, string_field_in_read_line_p);
         int integer_field = atoi(integer_field_in_read_line_p);
-
-        records[cont].string_field = string_field;
-        records[cont].integer_field = integer_field;
+        struct record *record_p = malloc(sizeof(struct record));
+        record_p->string_field = string_field;
+        record_p->integer_field = integer_field;
+        records[cont] = record_p;
         cont++;
         free(read_line_p);
     }
@@ -116,14 +113,37 @@ static void test_with_comparison_function(const char *file_path)
 {
     load_array(file_path);
 
+    /*
     for (int i = 0; i < SIZE; i++)
     {
-        printf("<%s,%d>\n", records[i].string_field, records[i].integer_field);
+        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
     }
+    */
 
-    printf("\n\n");
+    printf("\n\nOrdino per il  campo intero...\n\n");
 
-    sorted_array_sort((void**)records, comparator_record_int_field, SIZE);
+    sorted_array_sort((void **)records, comparator_record_int_field, SIZE);
+
+    /*
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
+    }
+    */
+
+    printf("\n\nDONE");
+
+    //sorted_array_sort((void **)records, comparator_record_string_field, SIZE);
+
+    //printf("\n\n");
+
+    /*for (int i = 0; i < SIZE; i++)
+    {
+        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
+    }
+    */
+
+    //printf("\n\n");
 
     free(records);
 }
@@ -137,7 +157,6 @@ int main(int argc, char const *argv[])
         exit(EXIT_FAILURE);
     }
     test_with_comparison_function(argv[1]);
-
 
     return (EXIT_SUCCESS);
 }

@@ -117,18 +117,25 @@ static void merge(void **array, int (*comparator)(void *, void *), int l, int m,
 // l is for left index and r is right index of the sub-array of array to be sorted
 static void merge_sort(void **array, int (*comparator)(void *, void *), int left, int right)
 {
+
     if (left >= right)
+    {
         return;
+    }
 
     if (right - left + 1 <= K)
     {
+
         binary_insertion_sort(array, comparator, left, right);
         return;
     }
 
     int mid = left + (right - left) / 2;
+
     merge_sort(array, comparator, left, mid);
+
     merge_sort(array, comparator, mid + 1, right);
+
     merge(array, comparator, left, mid, right);
 }
 
