@@ -18,17 +18,14 @@ static void merge_sort(void **array, int (*comparator)(void *, void *), int left
 static int binary_search(void **array, int (*comparator)(void *, void *), void *item, int low, int high)
 {
     if (high <= low)
-        // return (item > a[low]) ?(low + 1) : low;
-        return (((comparator))(item, array[low]) > 0 ? (low + 1) : low);
+        return (comparator(item, array[low]) < 0 ? low : low + 1);
 
     int mid = (low + high) / 2;
 
-    // if (item == a[mid])
-    if (((comparator))(item, array[mid]) == 0)
+    if (comparator(item, array[mid]) == 0)
         return mid + 1;
 
-    // if (item > a[mid])
-    if (((comparator))(item, array[mid]) > 0)
+    if (comparator(item, array[mid]) > 0)
         return binary_search(array, comparator, item, mid + 1, high);
 
     return binary_search(array, comparator, item, low, mid - 1);
@@ -40,13 +37,13 @@ static void binary_insertion_sort(void **array, int (*comparator)(void *, void *
     int i, loc, j;
     void *selected;
 
-    for (i = left; i <= right; ++i)
+    for (i = left + 1; i <= right; ++i)
     {
         j = i - 1;
         selected = array[i];
 
         // Find location where selected sould be inseretd
-        loc = binary_search(array, comparator, selected, 0, j);
+        loc = binary_search(array, comparator, selected, left, j);
 
         // Move all elements after location to create space
         while (j >= loc)
@@ -81,7 +78,7 @@ static void merge(void **array, int (*comparator)(void *, void *), int l, int m,
 
     while (i < n1 && j < n2)
     {
-        if (((comparator))(L[i], R[j]) <= 0)
+        if (comparator(L[i], R[j]) <= 0)
         {
             array[k] = L[i];
             i++;
@@ -114,31 +111,24 @@ static void merge(void **array, int (*comparator)(void *, void *), int l, int m,
     free(R);
 }
 
-// l is for left index and r is right index of the sub-array of array to be sorted
 static void merge_sort(void **array, int (*comparator)(void *, void *), int left, int right)
 {
-
     if (left >= right)
-    {
         return;
-    }
 
     if (right - left + 1 <= K)
     {
-
         binary_insertion_sort(array, comparator, left, right);
         return;
     }
 
     int mid = left + (right - left) / 2;
-
     merge_sort(array, comparator, left, mid);
-
     merge_sort(array, comparator, mid + 1, right);
-
     merge(array, comparator, left, mid, right);
 }
 
+// It return the pointer to the generic array sorted
 void **sorted_array_sort(void **array, int (*comparator)(void *, void *), int size)
 {
     if (comparator == NULL)

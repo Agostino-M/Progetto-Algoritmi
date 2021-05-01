@@ -9,7 +9,7 @@
 #define MERGE_BINARY_INSERTION_SORT_H
 
 // 'K' specifies the value of the sublists length for which Insertion Sort should be used instead of Merge Sort
-#define K 15
+#define K 30
 
 
 // Function that sorts a SortedArray using a modified version of the Merge Sort in which

@@ -5,6 +5,7 @@ clean:
 	rm -f build/* bin/*
 
 tests: bin/merge_binary_insertion_sort_tests
+	./bin/merge_binary_insertion_sort_tests
 
 usage: bin/merge_binary_insertion_sort
 	./bin/merge_binary_insertion_sort records.csv
@@ -23,5 +24,3 @@ bin/merge_binary_insertion_sort: build/merge_binary_insertion_sort.o build/merge
 
 bin/merge_binary_insertion_sort_tests: build/merge_binary_insertion_sort_tests.o build/merge_binary_insertion_sort.o build/unity.o $(COMMON_DEPS)
 	$(CC) -o bin/merge_binary_insertion_sort_tests  build/merge_binary_insertion_sort_tests.o build/merge_binary_insertion_sort.o build/unity.o
-
-

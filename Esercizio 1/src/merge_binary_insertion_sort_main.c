@@ -1,33 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "merge_binary_insertion_sort.h"
 
-#define SIZE 10
+#define SIZE 20000000
 
 struct record
 {
     char *string_field;
     int integer_field;
+    double double_field;
 };
 
 struct record **records;
 int cont = 0;
+float elapsed_time;
 
 // It takes as input two pointers to struct record
-// It returns 1 if and only if the integer field of the first record is less than
-// the integer field of the second one (0 otherwise)
-
+// It returns :
+// 0 if and only if the integer field of the first record is equal to the integer field of the second one
+// 1 if and only if the integer field of the first record is greater than the integer field of the second one
+// -1 if and only if the integer field of the first record is less than the integer field of the second one
 static int comparator_record_int_field(void *r1_p, void *r2_p)
 {
     if (r1_p == NULL)
     {
-        fprintf(stderr, "precedes_record_int_field: the first parameter cannot be NULL");
+        fprintf(stderr, "comparator_record_int_field: the first parameter cannot be NULL");
         exit(EXIT_FAILURE);
     }
     if (r2_p == NULL)
     {
-        fprintf(stderr, "precedes_record_int_field: the second parameter cannot be NULL");
+        fprintf(stderr, "comparator_record_int_field: the second parameter cannot be NULL");
         exit(EXIT_FAILURE);
     }
 
@@ -45,8 +49,10 @@ static int comparator_record_int_field(void *r1_p, void *r2_p)
 }
 
 // It takes as input two pointers to struct record
-// It returns 1 if and only if the string field of the first record is less than
-// the string field of the second one (0 otherwise)
+// It returns :
+// 0 if and only if the string field of the first record is equal to the string field of the second one
+// 1 if and only if the string field of the first record is greater than the string field of the second one
+// -1 if and only if the string field of the first record is less than the string field of the second one
 static int comparator_record_string_field(void *r1_p, void *r2_p)
 {
     if (r1_p == NULL)
@@ -59,12 +65,46 @@ static int comparator_record_string_field(void *r1_p, void *r2_p)
         fprintf(stderr, "precedes_string: the second parameter cannot be NULL");
         exit(EXIT_FAILURE);
     }
+
     struct record *rec1_p = (struct record *)r1_p;
     struct record *rec2_p = (struct record *)r2_p;
 
     return strcmp(rec1_p->string_field, rec2_p->string_field);
 }
 
+// It takes as input two pointers to struct record
+// It returns :
+// 0 if and only if the double field of the first record is equal to the double field of the second one
+// 1 if and only if the double field of the first record is greater than the double field of the second one
+// -1 if and only if the double field of the first record is less than the double field of the second one
+static int comparator_record_double_field(void *r1_p, void *r2_p)
+{
+    if (r1_p == NULL)
+    {
+        fprintf(stderr, "comparator_record_int_field: the first parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (r2_p == NULL)
+    {
+        fprintf(stderr, "comparator_record_int_field: the second parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+
+    struct record *rec1_p = (struct record *)r1_p;
+    struct record *rec2_p = (struct record *)r2_p;
+
+    if (rec1_p->double_field == rec2_p->double_field)
+        return 0;
+
+    else if (rec1_p->double_field > rec2_p->double_field)
+        return 1;
+
+    else
+        return -1;
+}
+
+// Loads the integer, string and double fields of the file lines
+// with file_path address inside the array pointed by "records"
 static void load_array(const char *file_path)
 {
     records = malloc(SIZE * sizeof(struct record));
@@ -72,6 +112,7 @@ static void load_array(const char *file_path)
     char *read_line_p;
     int buf_size = 1024;
     char buffer[1024];
+    cont = 0;
 
     fp = fopen(file_path, "r");
     if (fp == NULL)
@@ -92,6 +133,7 @@ static void load_array(const char *file_path)
         strtok(read_line_p, ",");
         char *string_field_in_read_line_p = strtok(NULL, ",");
         char *integer_field_in_read_line_p = strtok(NULL, ",");
+        char *double_field_in_read_line_p = strtok(NULL, ",");
         char *string_field = malloc((strlen(string_field_in_read_line_p) + 1) * sizeof(char));
         if (string_field == NULL)
         {
@@ -100,50 +142,51 @@ static void load_array(const char *file_path)
         }
         strcpy(string_field, string_field_in_read_line_p);
         int integer_field = atoi(integer_field_in_read_line_p);
+        double double_field = atof(double_field_in_read_line_p);
         struct record *record_p = malloc(sizeof(struct record));
         record_p->string_field = string_field;
         record_p->integer_field = integer_field;
+        record_p->double_field = double_field;
         records[cont] = record_p;
         cont++;
         free(read_line_p);
     }
 }
 
+// prints the string, integer and double fields of the array pointed by "records"
+void print_records()
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("<%s , %d , %f>\n", records[i]->string_field, records[i]->integer_field, records[i]->double_field);
+    }
+    printf("\n");
+}
+
+// It calls "load_array" and sorts the array pointed by "records" by integer, string and float fields
 static void test_with_comparison_function(const char *file_path)
 {
     load_array(file_path);
 
-    /*
-    for (int i = 0; i < SIZE; i++)
-    {
-        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
-    }
-    */
-
-    printf("\n\nOrdino per il  campo intero...\n\n");
-
+    printf("\n\nSort by int field...\n\n");
+    clock_t start_time = clock();
     sorted_array_sort((void **)records, comparator_record_int_field, SIZE);
+    elapsed_time = (float)(clock() - start_time);
+    printf("Done in %f seconds\n", elapsed_time);
 
-    /*
-    for (int i = 0; i < SIZE; i++)
-    {
-        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
-    }
-    */
+    printf("\n\nSort by string field...\n\n");
+    start_time = clock();
+    sorted_array_sort((void **)records, comparator_record_string_field, SIZE);
+    elapsed_time = (float)(clock() - start_time);
+    printf("Done in %f seconds\n", elapsed_time);
 
-    printf("\n\nDONE");
+    printf("\n\nSort by double field...\n\n");
+    start_time = clock();
+    sorted_array_sort((void **)records, comparator_record_double_field, SIZE);
+    elapsed_time = (float)(clock() - start_time);
+    printf("Done in %f seconds\n", elapsed_time);
 
-    //sorted_array_sort((void **)records, comparator_record_string_field, SIZE);
-
-    //printf("\n\n");
-
-    /*for (int i = 0; i < SIZE; i++)
-    {
-        printf("<%s,%d>\n", records[i]->string_field, records[i]->integer_field);
-    }
-    */
-
-    //printf("\n\n");
+    //print_records();
 
     free(records);
 }
@@ -156,7 +199,7 @@ int main(int argc, char const *argv[])
         printf("Usage: merge_binary_insertion_sort <path_to_data_file>\n");
         exit(EXIT_FAILURE);
     }
-    test_with_comparison_function(argv[1]);
 
+    test_with_comparison_function(argv[1]);
     return (EXIT_SUCCESS);
 }

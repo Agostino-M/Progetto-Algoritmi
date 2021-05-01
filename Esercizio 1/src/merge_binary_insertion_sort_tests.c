@@ -40,6 +40,7 @@ static int comparator_int_desc(void *i1, void *i2)
         return -1;
 }
 
+// comparator ralation used in tests
 static int comparator_string(void *s1, void *s2)
 {
     char *string1 = (char *)s1;
