@@ -15,7 +15,7 @@ struct record
 
 struct record **records;
 int cont = 0;
-float elapsed_time;
+double elapsed_time;
 
 // It takes as input two pointers to struct record
 // It returns :
@@ -168,23 +168,23 @@ static void test_with_comparison_function(const char *file_path)
 {
     load_array(file_path);
 
-    printf("\n\nSort by int field...\n\n");
+    printf("\nSort by int field...\n");
     clock_t start_time = clock();
     sorted_array_sort((void **)records, comparator_record_int_field, SIZE);
-    elapsed_time = (float)(clock() - start_time);
-    printf("Done in %f seconds\n", elapsed_time);
+    elapsed_time = (clock() - start_time) * 0.001;
+    printf("Done in %f ms\n", elapsed_time);
 
-    printf("\n\nSort by string field...\n\n");
+    printf("\nSort by string field...\n");
     start_time = clock();
     sorted_array_sort((void **)records, comparator_record_string_field, SIZE);
-    elapsed_time = (float)(clock() - start_time);
-    printf("Done in %f seconds\n", elapsed_time);
+    elapsed_time = (clock() - start_time) * 0.001;
+    printf("Done in %f ms\n", elapsed_time);
 
-    printf("\n\nSort by double field...\n\n");
+    printf("\nSort by double field...\n");
     start_time = clock();
     sorted_array_sort((void **)records, comparator_record_double_field, SIZE);
-    elapsed_time = (float)(clock() - start_time);
-    printf("Done in %f seconds\n", elapsed_time);
+    elapsed_time = (clock() - start_time) * 0.001;
+    printf("Done in %f ms\n\n", elapsed_time);
 
     //print_records();
 
