@@ -6,6 +6,7 @@
 
 int min(int a, int b, int c);
 int edit_distance_dyn_impl(char *s1, char *s2, int m, int n, int mat[][MAX_COL]);
+int edit_distance_impl(char *s1, char *s2, int m, int n);
 
 int min(int a, int b, int c)
 {
@@ -14,6 +15,32 @@ int min(int a, int b, int c)
 }
 
 int edit_distance(char *s1, char *s2, int m, int n)
+{
+    if (s1 == NULL)
+    {
+        fprintf(stderr, "edit_distance_dyn: the first parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (s2 == NULL)
+    {
+        fprintf(stderr, "edit_distance_dyn: the second parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (m < 0)
+    {
+        fprintf(stderr, "edit_distance_dyn: m length cannot be negative");
+        exit(EXIT_FAILURE);
+    }
+    if (n < 0)
+    {
+        fprintf(stderr, "edit_distance_dyn: n length cannot be negative");
+        exit(EXIT_FAILURE);
+    }
+
+    return edit_distance_impl(s1, s2, m, n);
+}
+
+int edit_distance_impl(char *s1, char *s2, int m, int n)
 {
     if (m == 0)
         return n;
@@ -38,9 +65,30 @@ int edit_distance(char *s1, char *s2, int m, int n)
 
 int edit_distance_dyn(char *s1, char *s2, int m, int n)
 {
+    if (s1 == NULL)
+    {
+        fprintf(stderr, "edit_distance_dyn: the first parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (s2 == NULL)
+    {
+        fprintf(stderr, "edit_distance_dyn: the second parameter cannot be NULL");
+        exit(EXIT_FAILURE);
+    }
+    if (m < 0)
+    {
+        fprintf(stderr, "edit_distance_dyn: m length cannot be negative");
+        exit(EXIT_FAILURE);
+    }
+    if (n < 0)
+    {
+        fprintf(stderr, "edit_distance_dyn: n length cannot be negative");
+        exit(EXIT_FAILURE);
+    }
+
     int mat[m][MAX_COL];
     memset(mat, -1, sizeof(mat));
-    edit_distance_dyn_impl(s1, s2, m, n, mat);
+    return edit_distance_dyn_impl(s1, s2, m, n, mat);
 }
 
 int edit_distance_dyn_impl(char *s1, char *s2, int m, int n, int mat[][MAX_COL])
