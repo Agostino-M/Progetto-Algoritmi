@@ -65,10 +65,6 @@ void setUp(void)
     i10 = 10;
 }
 
-void tearDown(void)
-{
-}
-
 static void test_three_el_int_asc(void)
 {
     int *array_expected[] = {&i1, &i2, &i3};
@@ -105,7 +101,7 @@ static void test_equal_el(void)
     TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 3);
 }
 
-static void test_ten_el_int_asc(void)
+static void test_ten_el_int(void)
 {
     int *array_expected[] = {&i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10};
     int *actual_array[] = {&i5, &i2, &i4, &i7, &i10, &i8, &i6, &i1, &i3, &i9};
@@ -114,7 +110,25 @@ static void test_ten_el_int_asc(void)
     TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 10);
 }
 
-static void test_three_el_string_asc(void)
+static void test_fifty_el_int(void)
+{
+    int *array_expected[] = {&i1, &i1, &i1, &i1, &i1, &i2, &i2, &i2, &i2, &i2, &i3, &i3, &i3, &i3, &i3, &i4, &i4, &i4, &i4, &i4, &i5, &i5, &i5, &i5, &i5, &i6, &i6, &i6, &i6, &i6, &i7, &i7, &i7, &i7, &i7, &i8, &i8, &i8, &i8, &i8, &i9, &i9, &i9, &i9, &i9, &i10, &i10, &i10, &i10, &i10};
+    int *actual_array[] = {&i5, &i2, &i4, &i7, &i10, &i8, &i6, &i1, &i3, &i9, &i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10, &i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10, &i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10, &i1, &i2, &i3, &i4, &i5, &i6, &i7, &i8, &i9, &i10};
+
+    sorted_array_sort((void **)actual_array, comparator_int_asc, 50);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 50);
+}
+
+static void test_fifty_el_string(void)
+{
+    char *array_expected[] = {"Acerbo", "Figliastro", "Mosterrà", "Quei", "Sfinge", "ago", "avea", "birra", "bullo", "cavallo", "ercole", "faccia", "facocero", "gigi", "hotel", "italia", "lame", "mamma", "mano", "nebula", "nebuloso", "oca", "occhio", "pippo", "pluto", "pollo", "quadretto", "quadro", "resto", "rutto", "sotto", "stato", "tetto", "tubercolosi", "ululato", "uovo", "uuu", "vai", "via", "vuoto", "wee", "would", "wow", "xenon", "xox", "ye", "you", "zeta", "zorro", "zzz"};
+    char *actual_array[] = {"you", "Quei", "zeta", "pollo", "italia", "resto", "ercole", "rutto", "stato", "cavallo", "sotto", "zorro", "ululato", "mamma", "uuu", "Mosterrà", "Sfinge", "ago", "quadretto", "avea", "tetto", "bullo", "quadro", "vai", "wow", "via", "wee", "occhio", "would", "xenon", "faccia", "facocero", "gigi", "lame", "Acerbo", "Figliastro", "mano", "vuoto", "nebula", "oca", "tubercolosi", "zzz", "birra", "pluto", "hotel", "xox", "nebuloso", "uovo", "ye", "pippo"};
+
+    sorted_array_sort((void **)actual_array, comparator_string, 50);
+    TEST_ASSERT_EQUAL_PTR_ARRAY(array_expected, actual_array, 50);
+}
+
+static void test_three_el_string(void)
 {
     char *array_expected[] = {"albero", "bici", "casa"};
     char *actual_array[] = {"casa", "bici", "albero"};
@@ -141,9 +155,11 @@ int main(void)
     RUN_TEST(test_three_el_int_desc);
     RUN_TEST(test_one_el_int);
     RUN_TEST(test_equal_el);
-    RUN_TEST(test_ten_el_int_asc);
-    RUN_TEST(test_three_el_string_asc);
+    RUN_TEST(test_ten_el_int);
+    RUN_TEST(test_fifty_el_int);
+    RUN_TEST(test_three_el_string);
     RUN_TEST(test_one_el_string);
+    RUN_TEST(test_fifty_el_string);
 
     return UNITY_END();
 }
