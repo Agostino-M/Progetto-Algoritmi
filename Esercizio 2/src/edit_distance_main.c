@@ -12,14 +12,12 @@ static void start_test(const char *file_path1, const char *file_path2)
     char buffer2[30];
     char **min_distance_words = malloc(MAX_LENGHT * sizeof(char *));
     int buf_size_correctme = 1024;
-    int buf_size_dictionary = 30;
     int min = INT_MAX;
     int temp = 0;
     int cont = 0;
     char *read_line_p;
     char *dictionary_word;
-    FILE *fp1;
-    FILE *fp2;
+    FILE *fp1, *fp2;
 
     fp1 = fopen(file_path1, "r");
     if (fp1 == NULL)
@@ -49,16 +47,10 @@ static void start_test(const char *file_path1, const char *file_path2)
 
     while (correct_me_word != NULL)
     {
-        //printf("\n Parola letta : %s \n", correct_me_word);
-
-        // Cerco in dictionary le parole con edit ditsance mininimo
-
         min = INT_MAX;
-
-        //Azzero il puntatore fp2
         rewind(fp2);
 
-        while (fscanf(fp2, "%s", buffer2) != EOF)
+        while (fscanf(fp2, "%29s", buffer2) != EOF)
         {
             dictionary_word = malloc((strlen(buffer2) + 1) * sizeof(char));
             if (dictionary_word == NULL)
@@ -67,10 +59,8 @@ static void start_test(const char *file_path1, const char *file_path2)
                 exit(EXIT_FAILURE);
             }
 
-            //strtok(buffer2, "\n");
             strcpy(dictionary_word, buffer2);
-
-            temp = edit_distance_dyn(correct_me_word, dictionary_word, strlen(correct_me_word), strlen(dictionary_word));
+            temp = edit_distance_dyn(correct_me_word, dictionary_word, (int)strlen(correct_me_word), (int)strlen(dictionary_word));
 
             if (min > temp)
             {
@@ -87,15 +77,13 @@ static void start_test(const char *file_path1, const char *file_path2)
             }
         }
 
-        printf("\nWords with edit_distance_min from --> %s : \n", correct_me_word);
-        printf("\nEdit_distance_min : %d\n", min);
+        printf("Words with edit_distance_min from '%s' are : \n", correct_me_word);
+        printf("Edit_distance_min : %d\n", min);
 
         for (int i = 0; i < cont; i++)
-        {
-            printf(" %s\n", min_distance_words[i]);
-        }
+            printf("\t- %s\n", min_distance_words[i]);
 
-        printf("\n\n");
+        printf("\n");
 
         correct_me_word = strtok(NULL, ".,: ");
     }
