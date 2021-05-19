@@ -1,22 +1,37 @@
 package src;
 
 public class Node<T> {
-    public T element;
-    public Node<T> parent;
+    private T value;
+    private Node<T> parent;
+    private int rank;
 
-    public T getElement() {
-        return element;
+    public Node(T value) {
+        this.value = value;
+        this.parent = this;
+        this.rank = 0;
+    }
+
+    public T getValue() {
+        return value;
     }
 
     public Node<T> getParent() {
         return parent;
     }
 
-    public void setElement(T element) {
-        this.element = element;
+    public int getRank() {
+        return rank;
+    }
+
+    public void setValue(T element) {
+        this.value = element;
     }
 
     public void setParent(Node<T> parent) {
         this.parent = parent;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }
