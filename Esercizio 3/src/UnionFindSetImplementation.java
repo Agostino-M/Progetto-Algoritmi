@@ -1,6 +1,3 @@
-package src;
-
-import java.util.List;
 
 import java.util.ArrayList;
 
@@ -14,7 +11,21 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
 
     private ArrayList<Node<T>> forest = new ArrayList<>();
 
-    public ArrayList<Node<T>> makeSet(ArrayList<Node<T>> set) { // O(1)
+    /**
+     * 
+     * @param set: the set from where initialize the list structure
+     * @return the new arraylist
+     * @throws UnionFindSetException if the set parameter is null
+     */
+    public ArrayList<Node<T>> makeSet(ArrayList<Node<T>> set) throws UnionFindSetException {
+        if (set == null)
+            throw new UnionFindSetException("UnionFindSetImplementation makeSet: set parameter cannot be null.");
+        if (set.isEmpty())
+            throw new UnionFindSetException("UnionFindSetImplementation makeSet: set parameter cannot be empty.");
+
+        if (!forest.isEmpty())
+            forest.clear();
+
         forest.addAll(set);
         return forest;
     }
@@ -26,24 +37,44 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
         return node.getParent();
     }
 
-    public Node<T> find(T value) {
+    /**
+     * 
+     * @param value: the value of the node to find in the internal structure
+     * @return the representative node
+     * @throws UnionFindSetException if the value parameter is null or if the node
+     *                               with that value was not found in the structure
+     */
+    public Node<T> find(T value) throws UnionFindSetException {
+        if (value == null)
+            throw new UnionFindSetException("UnionFindSetImplementation find: value parameter cannot be null.");
+
         for (int i = 0; i < forest.size(); i++) {
-            if (value.equals(forest.get(i).getValue())) {
+            if (value.equals(forest.get(i).getValue()))
                 return getRappresentante(forest.get(i));
-            }
         }
-        return null;
+
+        throw new UnionFindSetException("UnionFindSetImplementation find: value not found.");
     }
 
-    public ArrayList<Node<T>> union(T x, T y) {
+    /**
+     * 
+     * @param x: value of the node of the tree to merge
+     * @param y: value of the other node of the tree to merge
+     * @return a new list with the new merged set
+     * @throws UnionFindSetException if the parameters are null
+     */
+    public ArrayList<Node<T>> union(T x, T y) throws UnionFindSetException {
+        if (x == null)
+            throw new UnionFindSetException("UnionFindSetImplementation union: x parameter cannot be null.");
+
+        if (y == null)
+            throw new UnionFindSetException("UnionFindSetImplementation union: y parameter cannot be null.");
+
         if (x.equals(y))
             return forest;
 
         Node<T> rX = find(x);
         Node<T> rY = find(y);
-
-        if (rX == rY)
-            return forest;
 
         if (rX.getRank() < rY.getRank())
             rX.setParent(rY);
@@ -52,45 +83,22 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
             rX.setParent(rY);
             if (rY.getRank() == rX.getRank())
                 rY.setRank(rY.getRank() + 1);
-
         }
         return forest;
     }
 
-    public static void main(String[] args) {
-        ArrayList<Node<Integer>> testInt = new ArrayList<>();
-        testInt.add(new Node<>(1));
-        testInt.add(new Node<>(2));
-        testInt.add(new Node<>(3));
-        testInt.add(new Node<>(4));
-        testInt.add(new Node<>(5));
-        testInt.add(new Node<>(6));
+    private void printSet() {
+        for (int i = 0; i < forest.size(); i++) {
+            System.out.print("Valore: " + forest.get(i).getValue());
 
-        UnionFindSetImplementation<Integer> unionFindSet = new UnionFindSetImplementation<>();
+            if (forest.get(i) == forest.get(i).getParent())
+                System.out.print(" R");
 
-        ArrayList<Node<Integer>> finalArray;
-        finalArray = unionFindSet.makeSet(testInt);
-
-        for (int i = 0; i < finalArray.size(); i++) {
-            if (finalArray.get(i) == finalArray.get(i).getParent())
-                System.out.println("Nodo Rappresentante");
-
-            System.out.println("Valore: " + finalArray.get(i).getValue());
+            System.out.println();
         }
-
-        finalArray = unionFindSet.union(2, 3);
-        System.out.println("\nunion(2,3)\nIl rappresentante di 3 è: " + unionFindSet.find(3).getValue());
-
-        finalArray = unionFindSet.union(6, 2);
-        System.out.println("\nunion(6,2)\nIl rappresentante di 2 è: " + unionFindSet.find(2).getValue());
-        System.out.println("Il rappresentante di 3 è: " + unionFindSet.find(3).getValue());
-        System.out.println("Il rappresentante di 6 è: " + unionFindSet.find(6).getValue());
-        System.out.println("Il rank di 2 è: " + unionFindSet.find(2).getRank());
-
-        finalArray = unionFindSet.union(5, 1);
-        finalArray = unionFindSet.union(6, 1);
-        System.out.println("\nunion(6,1)\nIl rappresentante di 5 è: " + unionFindSet.find(5).getValue());
-        System.out.println("Il rank di 2 è: " + unionFindSet.find(2).getRank());
     }
 
+    public boolean isEmpty() {
+        return forest.isEmpty();
+    }
 }
