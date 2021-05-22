@@ -5,3 +5,5 @@
 *.txt
 */bin
 */build
+*.jar
+*.zip

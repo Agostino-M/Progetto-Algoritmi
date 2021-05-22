@@ -1,11 +1,10 @@
-package src;
+
 
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  * UnionFindSet
- * Generico T --> Nodo<T> --> Albero P --> Foresta U
  */
 public interface UnionFindSet<T> {
 
