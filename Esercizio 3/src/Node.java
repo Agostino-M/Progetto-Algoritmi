@@ -1,5 +1,10 @@
-package src;
-
+/**
+ * This class represents a sigle node object in the UnionFindSet tree.
+ * It was necessary to override equals
+ * 
+ * @author Agostino
+ * @param <T>; Type of the Node stored into an arraylist in UnionFindSet class
+ */
 public class Node<T> {
     private T value;
     private Node<T> parent;
@@ -33,5 +38,21 @@ public class Node<T> {
 
     public void setRank(int rank) {
         this.rank = rank;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Node<?> node = (Node<?>) o;
+
+        if (parent == null || value == null || !this.value.equals(node.value) || this.rank != node.rank
+                || !parent.value.equals(node.parent.value) || parent.rank != node.parent.rank)
+            return false;
+
+        return true;
     }
 }
