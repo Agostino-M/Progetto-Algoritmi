@@ -1,14 +1,13 @@
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
-
+import java.util.List;
 import org.junit.Test;
 import org.junit.Before;
 
 /**
- * It defines a test suite for the UnionFindSet library
+ * This class defines a test suite for the UnionFindSet library
  * 
  * @author Agostino
  */
@@ -16,8 +15,8 @@ public class UnionFindSetTests {
 
     private UnionFindSetImplementation<Integer> unionFindSetInteger;
     private UnionFindSetImplementation<String> unionFindSetString;
-    private ArrayList<Node<Integer>> setInt;
-    private ArrayList<Node<String>> setString;
+    private List<Node<Integer>> setInt;
+    private List<Node<String>> setString;
 
     @Before
     public void createUnionFindSets() {
@@ -43,18 +42,18 @@ public class UnionFindSetTests {
     }
 
     @Test
-    public void testIsEmptyInt_zeroEl() {
+    public void testIsEmptyIntZeroEl() {
         assertTrue(unionFindSetInteger.isEmpty());
     }
 
     @Test
-    public void testIsEmptyString_zeroEl() {
+    public void testIsEmptyStringZeroEl() {
         assertTrue(unionFindSetString.isEmpty());
     }
 
     @Test
-    public void testMakeSet_int() throws UnionFindSetException {
-        ArrayList<Node<Integer>> arrExpected = new ArrayList<>();
+    public void testMakeSetInt() throws UnionFindSetException {
+        List<Node<Integer>> arrExpected = new ArrayList<>();
         arrExpected.add(new Node<>(1));
         arrExpected.add(new Node<>(2));
         arrExpected.add(new Node<>(3));
@@ -62,13 +61,12 @@ public class UnionFindSetTests {
         arrExpected.add(new Node<>(5));
         arrExpected.add(new Node<>(6));
 
-        ArrayList<Node<Integer>> actualArr = unionFindSetInteger.makeSet(setInt);
-        assertEquals(arrExpected, actualArr);
+        assertEquals(arrExpected, unionFindSetInteger.makeSet(setInt));
     }
 
     @Test
-    public void testUnion_int() throws UnionFindSetException {
-        ArrayList<Node<Integer>> arrExpected = new ArrayList<>();
+    public void testUnionInt() throws UnionFindSetException {
+        List<Node<Integer>> arrExpected = new ArrayList<>();
         arrExpected.add(new Node<>(1));
         arrExpected.add(new Node<>(2));
         arrExpected.add(new Node<>(3));
@@ -79,15 +77,15 @@ public class UnionFindSetTests {
         arrExpected.get(0).setParent(arrExpected.get(5));
         arrExpected.get(5).setRank(1);
 
-        ArrayList<Node<Integer>> actualArr = unionFindSetInteger.makeSet(setInt);
+        List<Node<Integer>> actualArr = unionFindSetInteger.makeSet(setInt);
         unionFindSetInteger.union(1, 6);
 
         assertEquals(arrExpected, actualArr);
     }
 
     @Test
-    public void testMakeSet_string() throws UnionFindSetException {
-        ArrayList<Node<String>> arrExpected = new ArrayList<>();
+    public void testMakeSetString() throws UnionFindSetException {
+        List<Node<String>> arrExpected = new ArrayList<>();
         arrExpected.add(new Node<>("La"));
         arrExpected.add(new Node<>("Prego"));
         arrExpected.add(new Node<>("Prof"));
@@ -95,14 +93,12 @@ public class UnionFindSetTests {
         arrExpected.add(new Node<>("Ci"));
         arrExpected.add(new Node<>("Bocci"));
 
-        ArrayList<Node<String>> actualArr = unionFindSetString.makeSet(setString);
-
-        assertEquals(arrExpected, actualArr);
+        assertEquals(arrExpected, unionFindSetString.makeSet(setString));
     }
 
     @Test
-    public void testUnion_string() throws UnionFindSetException {
-        ArrayList<Node<String>> arrExpected = new ArrayList<>();
+    public void testUnionString() throws UnionFindSetException {
+        List<Node<String>> arrExpected = new ArrayList<>();
         arrExpected.add(new Node<>("La"));
         arrExpected.add(new Node<>("Prego"));
         arrExpected.add(new Node<>("Prof"));
@@ -113,7 +109,7 @@ public class UnionFindSetTests {
         arrExpected.get(4).setParent(arrExpected.get(5));
         arrExpected.get(5).setRank(1);
 
-        ArrayList<Node<String>> actualArr = unionFindSetString.makeSet(setString);
+        List<Node<String>> actualArr = unionFindSetString.makeSet(setString);
         unionFindSetString.union("Ci", "Bocci");
 
         assertEquals(arrExpected, actualArr);
