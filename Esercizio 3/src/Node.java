@@ -1,9 +1,9 @@
 /**
- * This class represents a sigle node object in the UnionFindSet tree.
- * It was necessary to override equals
+ * This class represents a sigle generic node object in the UnionFindSet tree.
+ * It provides setters, getters and a redefinition of equals and toString.
  * 
  * @author Agostino
- * @param <T>; Type of the Node stored into an arraylist in UnionFindSet class
+ * @param <T> Type of the Node stored into an arraylist in UnionFindSet class
  */
 public class Node<T> {
     private T value;
@@ -54,5 +54,15 @@ public class Node<T> {
             return false;
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        String temp = "Valore: " + value;
+
+        if (this == this.parent)
+            temp += " (R)";
+
+        return temp + "\n";
     }
 }
