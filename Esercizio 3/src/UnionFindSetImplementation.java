@@ -1,23 +1,19 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents an union find set implementation.
  * 
  * @author Agostino
- * @param <T>; Type of the union find set elements
+ * @param <T> Type of the union find set elements
  */
-public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
+public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
 
-    private ArrayList<Node<T>> forest = new ArrayList<>();
+    private List<Node<T>> forest = new ArrayList<>();
 
-    /**
-     * 
-     * @param set: the set from where initialize the list structure
-     * @return the new arraylist
-     * @throws UnionFindSetException if the set parameter is null
-     */
-    public ArrayList<Node<T>> makeSet(ArrayList<Node<T>> set) throws UnionFindSetException {
+    @Override
+    public List<Node<T>> makeSet(List<Node<T>> set) throws UnionFindSetException {
         if (set == null)
             throw new UnionFindSetException("UnionFindSetImplementation makeSet: set parameter cannot be null.");
         if (set.isEmpty())
@@ -37,13 +33,7 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
         return node.getParent();
     }
 
-    /**
-     * 
-     * @param value: the value of the node to find in the internal structure
-     * @return the representative node
-     * @throws UnionFindSetException if the value parameter is null or if the node
-     *                               with that value was not found in the structure
-     */
+    @Override
     public Node<T> find(T value) throws UnionFindSetException {
         if (value == null)
             throw new UnionFindSetException("UnionFindSetImplementation find: value parameter cannot be null.");
@@ -56,14 +46,8 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
         throw new UnionFindSetException("UnionFindSetImplementation find: value not found.");
     }
 
-    /**
-     * 
-     * @param x: value of the node of the tree to merge
-     * @param y: value of the other node of the tree to merge
-     * @return a new list with the new merged set
-     * @throws UnionFindSetException if the parameters are null
-     */
-    public ArrayList<Node<T>> union(T x, T y) throws UnionFindSetException {
+    @Override
+    public List<Node<T>> union(T x, T y) throws UnionFindSetException {
         if (x == null)
             throw new UnionFindSetException("UnionFindSetImplementation union: x parameter cannot be null.");
 
@@ -87,15 +71,10 @@ public class UnionFindSetImplementation<T> { // implements UnionFindSet<T>
         return forest;
     }
 
-    private void printSet() {
-        for (int i = 0; i < forest.size(); i++) {
-            System.out.print("Valore: " + forest.get(i).getValue());
+    public void printSet() {
+        for (int i = 0; i < forest.size(); i++)
+            System.out.print(forest.get(i).toString());
 
-            if (forest.get(i) == forest.get(i).getParent())
-                System.out.print(" R");
-
-            System.out.println();
-        }
     }
 
     public boolean isEmpty() {
