@@ -7,10 +7,10 @@ import java.util.*;
  * 
  * @author Agostino
  */
-public class Graph<T> {
+public class Graph<T, G> {
 
     // We use Hashmap to store the edges in the graph
-    private Map<T, List<Edge<T>>> map;
+    private Map<T, List<Edge<T, G>>> map;
     private boolean isNotOriented;
 
     public Graph(boolean isNotOriented) {
@@ -24,7 +24,7 @@ public class Graph<T> {
      * @param s: value of the new node
      */
     public void addNode(T s) {
-        map.put(s, new LinkedList<Edge<T>>());
+        map.put(s, new LinkedList<>());
     }
 
     /**
@@ -34,7 +34,7 @@ public class Graph<T> {
      * @param source      node
      * @param destination node
      */
-    public void addEdge(T source, T destination, T weight) {
+    public void addEdge(T source, T destination, G weight) {
         if (!map.containsKey(source))
             addNode(source);
 
@@ -153,9 +153,9 @@ public class Graph<T> {
      * 
      * @return List<Edge<T>>
      */
-    public List<Edge<T>> getEdges() {
-        List<Edge<T>> edgeList = new ArrayList<>();
-        List<Edge<T>> tempList;
+    public List<Edge<T,G>> getEdges() {
+        List<Edge<T,G>> edgeList = new ArrayList<>();
+        List<Edge<T,G>> tempList;
 
         for (T v : map.keySet()) {
             tempList = map.get(v);
@@ -175,7 +175,7 @@ public class Graph<T> {
      * @param s: value of the
      * @return the list
      */
-    public List<Edge<T>> getAdjacentNode(T s) {
+    public List<Edge<T,G>> getAdjacentNode(T s) {
         return map.get(s);
     }
 
@@ -186,7 +186,7 @@ public class Graph<T> {
 
         for (T v : map.keySet()) {
             builder.append(v.toString() + ": ");
-            for (Edge<T> w : map.get(v)) {
+            for (Edge<T,G> w : map.get(v)) {
                 builder.append(w.toString() + " ");
             }
             builder.append("\n");
@@ -201,7 +201,7 @@ class Main {
     public static void main(String args[]) {
 
         // Object of graph is created.
-        Graph<Integer> g = new Graph<Integer>(false);
+        Graph<Integer, Integer> g = new Graph<>(false);
 
         // edges are added.
         // Since the graph is bidirectional,

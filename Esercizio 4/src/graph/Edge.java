@@ -6,10 +6,10 @@ package src.graph;
  * 
  * @author Agostino
  */
-public class Edge<G> {
+public class Edge<G, T> {
     private G source;
     private G destination;
-    private G weight;
+    private T weight;
 
     public Edge(G destination) {
         this.destination = destination;
@@ -20,7 +20,7 @@ public class Edge<G> {
         this.source = source;
     }
 
-    public Edge(G source, G destination, G weight) {
+    public Edge(G source, G destination, T weight) {
         this.destination = destination;
         this.source = source;
         this.weight = weight;
@@ -34,7 +34,7 @@ public class Edge<G> {
         return destination;
     }
 
-    public G getWeight() {
+    public T getWeight() {
         return weight;
     }
 
@@ -46,7 +46,7 @@ public class Edge<G> {
         this.destination = destination;
     }
 
-    public void setWeight(G weight) {
+    public void setWeight(T weight) {
         this.weight = weight;
     }
 
@@ -62,7 +62,7 @@ public class Edge<G> {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Edge<?> edge = (Edge<?>) o;
+        Edge<?, ?> edge = (Edge<?,?>) o;
 
         return this.destination.equals(edge.destination);
     }
