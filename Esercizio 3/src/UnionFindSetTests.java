@@ -15,8 +15,8 @@ public class UnionFindSetTests {
 
     private UnionFindSetImplementation<Integer> unionFindSetInteger;
     private UnionFindSetImplementation<String> unionFindSetString;
-    private List<Node<Integer>> setInt;
-    private List<Node<String>> setString;
+    private List<Integer> setInt;
+    private List<String> setString;
 
     @Before
     public void createUnionFindSets() {
@@ -24,20 +24,20 @@ public class UnionFindSetTests {
         unionFindSetString = new UnionFindSetImplementation<>();
 
         setInt = new ArrayList<>();
-        setInt.add(new Node<>(1));
-        setInt.add(new Node<>(2));
-        setInt.add(new Node<>(3));
-        setInt.add(new Node<>(4));
-        setInt.add(new Node<>(5));
-        setInt.add(new Node<>(6));
+        setInt.add(1);
+        setInt.add(2);
+        setInt.add(3);
+        setInt.add(4);
+        setInt.add(5);
+        setInt.add(6);
 
         setString = new ArrayList<>();
-        setString.add(new Node<>("La"));
-        setString.add(new Node<>("Prego"));
-        setString.add(new Node<>("Prof"));
-        setString.add(new Node<>("Non"));
-        setString.add(new Node<>("Ci"));
-        setString.add(new Node<>("Bocci"));
+        setString.add("La");
+        setString.add("Prego");
+        setString.add("Prof");
+        setString.add("Non");
+        setString.add("Ci");
+        setString.add("Bocci");
 
     }
 
