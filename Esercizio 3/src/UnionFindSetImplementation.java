@@ -13,7 +13,7 @@ public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
     private List<Node<T>> forest = new ArrayList<>();
 
     @Override
-    public List<Node<T>> makeSet(List<Node<T>> set) throws UnionFindSetException {
+    public List<Node<T>> makeSet(List<T> set) throws UnionFindSetException {
         if (set == null)
             throw new UnionFindSetException("UnionFindSetImplementation makeSet: set parameter cannot be null.");
         if (set.isEmpty())
@@ -22,7 +22,9 @@ public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
         if (!forest.isEmpty())
             forest.clear();
 
-        forest.addAll(set);
+        for (T t : set) {
+            forest.add(new Node<>(t));
+        }
         return forest;
     }
 
