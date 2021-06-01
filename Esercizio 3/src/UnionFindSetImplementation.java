@@ -22,9 +22,9 @@ public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
         if (!forest.isEmpty())
             forest.clear();
 
-        for (T t : set) {
+        for (T t : set)
             forest.add(new Node<>(t));
-        }
+
         return forest;
     }
 
@@ -40,10 +40,9 @@ public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
         if (value == null)
             throw new UnionFindSetException("UnionFindSetImplementation find: value parameter cannot be null.");
 
-        for (int i = 0; i < forest.size(); i++) {
-            if (value.equals(forest.get(i).getValue()))
-                return getRappresentante(forest.get(i));
-        }
+        for (Node<T> node : forest)
+            if (value.equals(node.getValue()))
+                return getRappresentante(node);
 
         throw new UnionFindSetException("UnionFindSetImplementation find: value not found.");
     }

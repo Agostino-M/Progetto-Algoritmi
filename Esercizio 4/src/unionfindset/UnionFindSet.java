@@ -17,7 +17,7 @@ public interface UnionFindSet<T> {
      * @return List: the new list
      * @throws UnionFindSetException if the set parameter is null
      */
-    public List<Node<T>> makeSet(List<Node<T>> set) throws UnionFindSetException;
+    public List<Node<T>> makeSet(List<T> set) throws UnionFindSetException;
 
     /**
      * This function finds the representative node of a specified node.
