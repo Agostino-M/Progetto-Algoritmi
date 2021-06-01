@@ -1,5 +1,7 @@
 package src.graph;
 
+import java.util.Objects;
+
 /**
  * Edge represent an edge with source, destination and weight. It provides
  * setters, getters and an ad hoc ovveride of toString and equals.
@@ -10,10 +12,6 @@ public class Edge<G, T> {
     private G source;
     private G destination;
     private T weight;
-
-    public Edge(G destination) {
-        this.destination = destination;
-    }
 
     public Edge(G source, G destination) {
         this.destination = destination;
@@ -52,7 +50,7 @@ public class Edge<G, T> {
 
     @Override
     public String toString() {
-        return "\tS:" + source + "\tD:" + destination + "\tW:" + weight + "\n";
+        return "\n\t- S:" + source + "\tD:" + destination + "\tW:" + weight;
     }
 
     @Override
@@ -62,8 +60,8 @@ public class Edge<G, T> {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Edge<?, ?> edge = (Edge<?,?>) o;
+        Edge<?, ?> edge = (Edge<?, ?>) o;
 
-        return this.destination.equals(edge.destination);
+        return Objects.equals(source, edge.source) && Objects.equals(destination, edge.destination);
     }
 }

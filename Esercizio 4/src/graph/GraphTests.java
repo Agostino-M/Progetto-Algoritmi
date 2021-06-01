@@ -21,7 +21,7 @@ public class GraphTests {
     private Graph<String, Integer> graphIntString;
 
     @Before
-    public void createUnionFindSets() {
+    public void createUnionFindSets() throws GraphException {
         graphInt = new Graph<>(true);
         graphString = new Graph<>(true);
         graphIntString = new Graph<>(true);
@@ -73,7 +73,7 @@ public class GraphTests {
     }
 
     @Test
-    public void testAddNodeInt() {
+    public void testAddNodeInt() throws GraphException {
         graphInt = new Graph<>(false);
         graphInt.addNode(0);
 
@@ -84,7 +84,7 @@ public class GraphTests {
     }
 
     @Test
-    public void testAddNodeString() {
+    public void testAddNodeString() throws GraphException {
         graphString = new Graph<>(false);
         graphString.addNode("Albero");
 
@@ -95,7 +95,7 @@ public class GraphTests {
     }
 
     @Test
-    public void testAddNodeIntString() {
+    public void testAddNodeIntString() throws GraphException {
         graphIntString = new Graph<>(false);
         graphIntString.addNode("Albero");
 
@@ -111,89 +111,114 @@ public class GraphTests {
     }
 
     @Test
-    public void testHasEdgeInt() {
+    public void testHasEdgeInt() throws GraphException {
         assertTrue(graphInt.hasEdge(4, 0));
     }
 
     @Test
-    public void testHasNodeInt() {
+    public void testHasNodeInt() throws GraphException {
         assertTrue(graphInt.hasNode(4));
     }
 
     @Test
-    public void testHasNodeString() {
+    public void testHasNodeString() throws GraphException {
         assertTrue(graphString.hasNode("Ciao"));
     }
 
     @Test
-    public void testHasNodeIntString() {
+    public void testHasNodeIntString() throws GraphException {
         assertTrue(graphIntString.hasNode("Ciao"));
     }
 
     @Test
-    public void testDeleteNodeInt() {
+    public void testDeleteNodeInt() throws GraphException {
         graphInt.deleteNode(2);
         assertFalse(graphInt.hasNode(2));
     }
 
     @Test
-    public void testDeleteNodeString() {
+    public void testDeleteNodeString() throws GraphException {
         graphString.deleteNode("Ciao");
         assertFalse(graphString.hasNode("Ciao"));
     }
 
     @Test
-    public void testDeleteNodeIntString() {
+    public void testDeleteNodeIntString() throws GraphException {
         graphIntString.deleteNode("Ciao");
         assertFalse(graphIntString.hasNode("Ciao"));
     }
 
     @Test
-    public void testDeleteEdgeInt() {
+    public void testDeleteEdgeInt() throws GraphException {
         graphInt.deleteEdge(1, 3);
         assertFalse(graphInt.hasEdge(1, 3));
     }
 
     @Test
-    public void testDeleteEdgeString() {
+    public void testDeleteEdgeString() throws GraphException {
         graphString.deleteEdge("Ciao", "Amici");
         assertFalse(graphString.hasEdge("Ciao", "Amici"));
     }
 
     @Test
-    public void testDeleteEdgeIntString() {
+    public void testDeleteEdgeIntString() throws GraphException {
         graphIntString.deleteEdge("Ciao", "Amici");
         assertFalse(graphIntString.hasEdge("Ciao", "Amici"));
     }
 
     @Test
-    public void testAdjacentNodesInt() {
-        List<Edge<Integer, Integer>> expectedList = new ArrayList<>();
+    public void testAdjacentNodesInt() throws GraphException {
+        List<Integer> expectedList = new ArrayList<>();
 
-        expectedList.add(new Edge<>(0));
-        expectedList.add(new Edge<>(2));
-        expectedList.add(new Edge<>(3));
-        expectedList.add(new Edge<>(4));
+        expectedList.add(0);
+        expectedList.add(2);
+        expectedList.add(3);
+        expectedList.add(4);
 
         assertEquals(graphInt.getAdjacentNode(1), expectedList);
     }
 
     @Test
-    public void testAdjacentNodesString() {
-        List<Edge<String, String>> expectedList = new ArrayList<>();
+    public void testAdjacentNodesString() throws GraphException {
+        List<String> expectedList = new ArrayList<>();
 
-        expectedList.add(new Edge<>("piace"));
-        expectedList.add(new Edge<>("non"));
+        expectedList.add("piace");
+        expectedList.add("non");
 
         assertEquals(graphString.getAdjacentNode("mi"), expectedList);
     }
 
     @Test
-    public void testAdjacentNodesIntString() {
-        List<Edge<String, Integer>> expectedList = new ArrayList<>();
+    public void testAdjacentNodesIntString() throws GraphException {
+        List<String> expectedList = new ArrayList<>();
 
-        expectedList.add(new Edge<>("piace"));
-        expectedList.add(new Edge<>("non"));
+        expectedList.add("piace");
+        expectedList.add("non");
+
+        assertEquals(graphIntString.getAdjacentNode("mi"), expectedList);
+    }
+
+    @Test
+    public void testGetLabelInt() throws GraphException {
+        assertEquals(graphInt.getEdgeLabel(1, 3), (Integer) 8);
+    }
+
+    @Test
+    public void testGetLabelString() throws GraphException {
+        List<String> expectedList = new ArrayList<>();
+
+        expectedList.add("piace");
+        expectedList.add("non");
+
+        assertEquals(graphString.getAdjacentNode("mi"), expectedList);
+    }
+
+    @Test
+    public void testGetLabelIntString() throws GraphException {
+        List<String> expectedList = new ArrayList<>();
+
+        expectedList.add("piace");
+        expectedList.add("non");
 
         assertEquals(graphIntString.getAdjacentNode("mi"), expectedList);
     }

@@ -22,8 +22,14 @@ public class Graph<T, G> {
      * This function adds a new node to the graph. Complexity: O(1)
      * 
      * @param s: value of the new node
+     * @throws GraphException
      */
-    public void addNode(T s) {
+    public void addNode(T s) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph addNode: source parameter s cannot be null.");
+        if (hasNode(s))
+            throw new GraphException("Graph addNode: node " + s + " already exists in this Graph.");
+
         map.put(s, new LinkedList<>());
     }
 
@@ -33,18 +39,26 @@ public class Graph<T, G> {
      * 
      * @param source      node
      * @param destination node
+     * @throws GraphException
      */
-    public void addEdge(T source, T destination, G weight) {
-        if (!map.containsKey(source))
-            addNode(source);
+    public void addEdge(T s, T d, G w) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph addEdge: source parameter s cannot be null.");
+        if (d == null)
+            throw new GraphException("Graph addEdge: destination parameter d cannot be null.");
+        if (w == null)
+            throw new GraphException("Graph addEdge: weight parameter w cannot be null.");
 
-        if (!map.containsKey(destination))
-            addNode(destination);
+        if (!map.containsKey(s))
+            addNode(s);
 
-        map.get(source).add(new Edge<>(source, destination, weight));
+        if (!map.containsKey(d))
+            addNode(d);
+
+        map.get(s).add(new Edge<>(s, d, w));
 
         if (isNotOriented) {
-            map.get(destination).add(new Edge<>(destination, source, weight));
+            map.get(d).add(new Edge<>(d, s, w));
         }
     }
 
@@ -62,8 +76,11 @@ public class Graph<T, G> {
      * 
      * @param s: value of the node to find in the Graph
      * @return true if the node exist, false otherwise
+     * @throws GraphException
      */
-    public boolean hasNode(T s) {
+    public boolean hasNode(T s) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph hasNode: source parameter s cannot be null.");
         return map.containsKey(s);
     }
 
@@ -73,9 +90,37 @@ public class Graph<T, G> {
      * @param s: source node
      * @param d: destination node
      * @return true if the edge exist, false otherwise
+     * @throws GraphException
      */
-    public boolean hasEdge(T s, T d) {
-        return map.get(s).contains(new Edge<>(s, d));
+    public boolean hasEdge(T s, T d) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph hasEdge: source parameter s cannot be null.");
+        if (d == null)
+            throw new GraphException("Graph hasEdge: destination parameter d cannot be null.");
+
+        if (map.get(s) != null)
+            return map.get(s).contains(new Edge<>(s, d));
+
+        return false;
+    }
+
+    /**
+     * This function remove a defined node in the graph. Complexity: O(n).
+     * 
+     * @param s: source node
+     * @throws GraphException
+     */
+    public void deleteNode(T s) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph deleteNode: source parameter s cannot be null.");
+        if (!map.containsKey(s))
+            throw new GraphException("Graph deleteNode: source parameter " + s + " not exists.");
+
+        for (T v : map.keySet())
+            if (hasEdge(v, s))
+                deleteEdge(s, v);
+
+        map.remove(s);
     }
 
     /**
@@ -83,27 +128,23 @@ public class Graph<T, G> {
      * 
      * @param s: source node
      * @param d: destination node
+     * @throws GraphException
      */
-    public void deleteEdge(T s, T d) {
-        if (map.containsKey(s) && map.containsKey(d)) {
-            map.get(s).remove(new Edge<>(s, d));
+    public void deleteEdge(T s, T d) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph deleteEdge: source parameter s cannot be null.");
+        if (d == null)
+            throw new GraphException("Graph deleteEdge: destination parameter d cannot be null.");
+        if (!map.containsKey(s))
+            throw new GraphException("Graph deleteEdge: source parameter " + s + " not exists.");
+        if (!map.containsKey(d))
+            throw new GraphException("Graph deleteEdge: destination parameter " + d + " not exists.");
 
-            if (isNotOriented)
-                map.get(d).remove(new Edge<>(d, s));
+        map.get(s).remove(new Edge<>(s, d));
 
-        }
-    }
+        if (isNotOriented)
+            map.get(d).remove(new Edge<>(d, s));
 
-    /**
-     * This function remove a defined node in the graph. Complexity: O(n).
-     * 
-     * @param s: source node
-     */
-    public void deleteNode(T s) {
-        for (T v : map.keySet())
-            deleteEdge(s, v);
-
-        map.remove(s);
     }
 
     /**
@@ -153,17 +194,12 @@ public class Graph<T, G> {
      * 
      * @return List<Edge<T>>
      */
-    public List<Edge<T,G>> getEdges() {
-        List<Edge<T,G>> edgeList = new ArrayList<>();
-        List<Edge<T,G>> tempList;
+    public List<Edge<T, G>> getEdges() {
+        List<Edge<T, G>> edgeList = new ArrayList<>();
 
-        for (T v : map.keySet()) {
-            tempList = map.get(v);
-
-            for (int i = 0; i < tempList.size(); i++) {
-                edgeList.add(tempList.get(i));
-            }
-        }
+        for (T v : map.keySet())
+            for (int i = 0; i < map.get(v).size(); i++)
+                edgeList.add(map.get(v).get(i));
 
         return edgeList;
     }
@@ -172,11 +208,46 @@ public class Graph<T, G> {
      * This function return a List containing all the adjacent node from node s.
      * Complexity: O(1)*.
      * 
-     * @param s: value of the
-     * @return the list
+     * @param s : value of the node
+     * @return List<Edge<T, G>>
+     * @throws GraphException
      */
-    public List<Edge<T,G>> getAdjacentNode(T s) {
-        return map.get(s);
+    public List<T> getAdjacentNode(T s) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph getAdjacentNode: source parameter s cannot be null.");
+        if (!map.containsKey(s))
+            throw new GraphException("Graph getAdjacentNode: node " + s + " not exists.");
+
+        List<T> resultList = new ArrayList<>();
+
+        for (int i = 0; i < map.get(s).size(); i++)
+            resultList.add(map.get(s).get(i).getDestination());
+
+        return resultList;
+    }
+
+    /**
+     * This function returns the generic value G of the label (weight) of a edge
+     * Complexity: O(1)*
+     * 
+     * @param s
+     * @param d
+     * @return
+     * @throws GraphException
+     */
+    public G getEdgeLabel(T s, T d) throws GraphException {
+        if (s == null)
+            throw new GraphException("Graph getEdgeLabel: source parameter s cannot be null.");
+        if (d == null)
+            throw new GraphException("Graph getEdgeLabel: destination parameter d cannot be null.");
+        if (!hasEdge(s, d))
+            throw new GraphException("Graph getEdgeLabel: edge (" + s + ", " + d + ") does not exists.");
+
+        for (int i = 0; i < map.get(s).size(); i++)
+            if (map.get(s).get(i).getDestination() == d)
+                return map.get(s).get(i).getWeight();
+
+        return null;
     }
 
     // Prints the adjancency list of each vertex.
@@ -185,72 +256,13 @@ public class Graph<T, G> {
         StringBuilder builder = new StringBuilder();
 
         for (T v : map.keySet()) {
-            builder.append(v.toString() + ": ");
-            for (Edge<T,G> w : map.get(v)) {
-                builder.append(w.toString() + " ");
-            }
-            builder.append("\n");
+            builder.append(v.toString().toUpperCase() + ":");
+            for (Edge<T, G> edge : map.get(v))
+                builder.append(edge.toString() + " ");
+
+            builder.append("\t\n\n");
         }
 
         return (builder.toString());
-    }
-}
-
-class Main {
-
-    public static void main(String args[]) {
-
-        // Object of graph is created.
-        Graph<Integer, Integer> g = new Graph<>(false);
-
-        // edges are added.
-        // Since the graph is bidirectional,
-        // so boolean bidirectional is passed as true.
-        g.addEdge(0, 1, 5);
-        g.addEdge(0, 4, 4);
-        g.addEdge(1, 2, 6);
-        g.addEdge(1, 3, 8);
-        g.addEdge(1, 4, 12);
-        g.addEdge(2, 3, 41);
-        g.addEdge(3, 4, 9);
-
-        // print the graph.
-        System.out.println("Graph:\n" + g.toString());
-
-        // gives the no of vertices in the graph.
-        System.out.println("Node count: " + g.getNodeCount());
-
-        // gives the no of edges in the graph.
-        System.out.println("Edge count: " + g.getEdgesCount());
-
-        // tells whether the edge is present or not.
-        System.out.println("Edge(3,4): " + g.hasEdge(3, 4));
-
-        // tells whether vertex is present or not
-        System.out.println("Node(5): " + g.hasNode(5));
-
-        // tells whether vertex is present or not
-        System.out.println("deleteNode(2):\n");
-        g.deleteNode(2);
-
-        System.out.println("\nGraph:\n" + g.toString());
-
-        System.out.println("deleteEdge(3,4):\n");
-        g.deleteEdge(3, 4);
-
-        System.out.println("\nGraph:\n" + g.toString());
-
-        System.out.println("Node(2): " + g.hasNode(2));
-
-        System.out.println("Edge(3,2): " + g.hasEdge(3, 2));
-
-        System.out.println("Lista nodi adiacenti a 1: " + g.getAdjacentNode(1).toString());
-
-        System.out.println("Lista nodi del grafo: " + g.getNodes().toString());
-
-        System.out.println("Lista archi del grafo: " + g.getEdges().toString());
-
-        System.out.println("Non orientato? " + g.getIsNotOriented());
-
     }
 }
