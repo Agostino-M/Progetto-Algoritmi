@@ -5,7 +5,7 @@ import src.graph.Edge;
 
 /**
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public class EdgeFloatComparator implements Comparator<Edge<String, Float>> {
     

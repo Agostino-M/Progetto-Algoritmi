@@ -9,7 +9,7 @@ import org.junit.Before;
 /**
  * This class defines a test suite for the UnionFindSet library
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public class UnionFindSetTests {
 

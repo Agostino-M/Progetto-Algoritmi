@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * UnionFindSet
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public interface UnionFindSet<T> {
 

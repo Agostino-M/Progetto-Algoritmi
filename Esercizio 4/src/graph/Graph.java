@@ -4,8 +4,8 @@ import java.util.*;
 
 /**
  * Java program to implement Graph with the help of Generics
- * 
- * @author Agostino
+ *  
+ * @author Agostino and Andrea
  */
 public class Graph<T, G> {
 

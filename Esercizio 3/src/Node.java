@@ -2,7 +2,7 @@
  * This class represents a sigle generic node object in the UnionFindSet tree.
  * It provides setters, getters and a redefinition of equals and toString.
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  * @param <T> Type of the Node stored into an arraylist in UnionFindSet class
  */
 public class Node<T> {
