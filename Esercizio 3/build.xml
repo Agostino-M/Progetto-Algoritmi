@@ -1,0 +1,42 @@
+<project name="Union_find_set_test" basedir="." default="all">
+
+    <target name="init">
+        <property name="project.name" value="${ant.project.name}" />
+        <property location="classes" name="classes.dir" />
+        <property location="build" name="build.dir" />
+        <property location="src" name="src.dir" />
+        <property location="dist" name="dist.dir" />
+        <property location="lib/junit-platform-console-standalone-1.8.0-M1.jar" name="junit" />
+    </target>
+
+    <target depends="init" name="clean">
+        <delete dir="${build.dir}" />
+        <delete dir="${classes.dir}" />
+    </target>
+
+    <target depends="init" name="compile">
+        <mkdir dir="${classes.dir}" />
+        <javac destdir="${classes.dir}" srcdir="${src.dir}">
+            <classpath>
+                <pathelement location="${junit}" />
+            </classpath>
+        </javac>
+    </target>
+
+    <target depends="compile" name="test">
+        <mkdir dir="build" />
+        <jar destfile="build/union-find-set.jar" basedir="classes">
+            <zipgroupfileset dir="lib" includes="*.jar" excludes="" />
+            <manifest>
+                <attribute name="Main-Class" value="UnionFindSetTestRunner" />
+                <attribute name="Class-Path" value="${classpath}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target depends="test" name="run_test">
+        <java jar="build/union-find-set.jar" fork="true" />
+    </target>
+
+    <target depends="clean, init, compile, test" name="all" />
+</project>
