@@ -1,4 +1,4 @@
-<project name="Union_find" basedir="." default="all">
+<project name="Kruskal_test_usage" basedir="." default="all">
 
   <target name="init">
     <property name="project.name" value="${ant.project.name}" />
@@ -10,8 +10,8 @@
   </target>
 
   <target depends="init" name="clean">
-    <delete dir="${build.dir}"/>
-    <delete dir="${classes.dir}"/>
+    <delete dir="${build.dir}" />
+    <delete dir="${classes.dir}" />
   </target>
 
   <target depends="init" name="compile">
@@ -24,32 +24,32 @@
   </target>
 
   <target depends="compile" name="usage">
-    <mkdir dir="build"/>
+    <mkdir dir="build" />
     <jar destfile="build/Test_application.jar" basedir="classes">
       <manifest>
-        <attribute name="Main-Class" value="src/graphusage/KruskalUsage"/>
-        <attribute name="Class-Path" value="${classpath}"/>
+        <attribute name="Main-Class" value="src/graphusage/KruskalUsage" />
+        <attribute name="Class-Path" value="${classpath}" />
       </manifest>
     </jar>
   </target>
 
   <target depends="compile" name="test">
-    <mkdir dir="build"/>
+    <mkdir dir="build" />
     <jar destfile="build/Graph_unit_test.jar" basedir="classes">
-      <zipgroupfileset dir="lib" includes="*.jar" excludes=""/>
+      <zipgroupfileset dir="lib" includes="*.jar" excludes="" />
       <manifest>
-        <attribute name="Main-Class" value="src/graph/GraphTestRunner"/>
-        <attribute name="Class-Path" value="${classpath}"/>
+        <attribute name="Main-Class" value="src/graph/GraphTestRunner" />
+        <attribute name="Class-Path" value="${classpath}" />
       </manifest>
     </jar>
   </target>
 
   <target depends="usage" name="run_usage">
-    <java jar="build/Test_application.jar" fork="true"/>
+    <java jar="build/Test_application.jar" fork="true" />
   </target>
 
   <target depends="test" name="run_test">
-    <java jar="build/Graph_unit_test.jar" fork="true"/>
+    <java jar="build/Graph_unit_test.jar" fork="true" />
   </target>
 
   <target depends="clean, init, compile, usage, test" name="all" />
