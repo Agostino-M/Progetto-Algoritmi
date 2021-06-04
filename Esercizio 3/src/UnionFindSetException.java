@@ -1,7 +1,7 @@
 /**
  * Exception throwable by the UnionFindSet library
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public class UnionFindSetException extends Exception {
 

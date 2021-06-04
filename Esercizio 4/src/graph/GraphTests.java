@@ -12,7 +12,7 @@ import org.junit.Before;
 /**
  * It defines a test suite for the Graph library
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public class GraphTests {
 

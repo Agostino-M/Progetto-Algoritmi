@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * This class represents an union find set implementation.
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  * @param <T> Type of the union find set elements
  */
 public class UnionFindSetImplementation<T> implements UnionFindSet<T> {

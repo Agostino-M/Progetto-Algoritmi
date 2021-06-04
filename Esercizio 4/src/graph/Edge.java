@@ -6,7 +6,7 @@ import java.util.Objects;
  * Edge represent an edge with source, destination and weight. It provides
  * setters, getters and an ad hoc ovveride of toString and equals.
  * 
- * @author Agostino
+ * @author Agostino and Andrea
  */
 public class Edge<G, T> {
     private G source;
