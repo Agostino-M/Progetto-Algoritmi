@@ -171,20 +171,20 @@ static void test_with_comparison_function(const char *file_path)
     printf("\nSort by int field...\n");
     clock_t start_time = clock();
     sorted_array_sort((void **)records, comparator_record_int_field, SIZE);
-    elapsed_time = (clock() - start_time) * 0.001;
-    printf("Done in %f ms\n", elapsed_time);
+    elapsed_time = (clock() - start_time) / 1000000.0;
+    printf("Done in %f sec\n", elapsed_time);
 
     printf("\nSort by string field...\n");
     start_time = clock();
     sorted_array_sort((void **)records, comparator_record_string_field, SIZE);
-    elapsed_time = (clock() - start_time) * 0.001;
-    printf("Done in %f ms\n", elapsed_time);
+    elapsed_time = (clock() - start_time) / 1000000.0;
+    printf("Done in %f sec\n", elapsed_time);
 
     printf("\nSort by double field...\n");
     start_time = clock();
     sorted_array_sort((void **)records, comparator_record_double_field, SIZE);
-    elapsed_time = (clock() - start_time) * 0.001;
-    printf("Done in %f ms\n\n", elapsed_time);
+    elapsed_time = (clock() - start_time) / 1000000.0;
+    printf("Done in %f sec\n\n", elapsed_time);
 
     //print_records();
 
