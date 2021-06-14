@@ -74,8 +74,8 @@ public class UnionFindSetTests {
         arrExpected.add(new Node<>(5));
         arrExpected.add(new Node<>(6));
 
-        arrExpected.get(0).setParent(arrExpected.get(5));
-        arrExpected.get(5).setRank(1);
+        arrExpected.get(5).setParent(arrExpected.get(0));
+        arrExpected.get(0).setRank(1);
 
         List<Node<Integer>> actualArr = unionFindSetInteger.makeSet(setInt);
         unionFindSetInteger.union(1, 6);
@@ -106,8 +106,8 @@ public class UnionFindSetTests {
         arrExpected.add(new Node<>("Ci"));
         arrExpected.add(new Node<>("Bocci"));
 
-        arrExpected.get(4).setParent(arrExpected.get(5));
-        arrExpected.get(5).setRank(1);
+        arrExpected.get(5).setParent(arrExpected.get(4));
+        arrExpected.get(4).setRank(1);
 
         List<Node<String>> actualArr = unionFindSetString.makeSet(setString);
         unionFindSetString.union("Ci", "Bocci");

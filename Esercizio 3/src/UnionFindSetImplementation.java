@@ -63,11 +63,11 @@ public class UnionFindSetImplementation<T> implements UnionFindSet<T> {
 
         if (rX.getRank() < rY.getRank())
             rX.setParent(rY);
-
-        else {
-            rX.setParent(rY);
+            
+            else {
+            rY.setParent(rX);
             if (rY.getRank() == rX.getRank())
-                rY.setRank(rY.getRank() + 1);
+                rX.setRank(rX.getRank() + 1);
         }
         return forest;
     }
